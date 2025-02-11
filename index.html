@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Load Tester Draft Catlyst</title>
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
@@ -8,15 +9,15 @@
             <div class="section">
                 <h1>Load Tester</h1>
                 <button onclick="initializeSerial();">Connect Tester</button>
+                <h2 id="testerName">Not Connected</h2>
                 <div>
                     <h2>Readings</h2>
                     <ul><b>Current: </b><span id="currentReading"></span> A</ul>
                     <ul><b>Voltage: </b><span id="voltageReading"></span> V</ul>
-                    <ul><b>Resistance: </b><span id="resistanceReading"></span> Ω</ul>
                     <ul><b>Power: </b><span id="powerReading"></span> W</ul>
                 </div>
-                <div style="display:none;">
-                    <label>Command</label>
+                <div id="command" style="display: none;">
+                    <label>Command (Please use with caution)</label>
                     <input type="text" id="commandPrompt"/>
                     <button id="sendCommand">Send</button>
                 </div>
@@ -34,6 +35,8 @@
                 <p><b>Last Voltage Min: </b><span id="batteryLastVoltageMin"></span> V</p>
                 <p><b>Last Current Max: </b><span id="batteryLastCurrentMax"></span> A</p>
                 <p><b>Last Current Min: </b><span id="batteryLastCurrentMin"></span> A</p>
+
+                <button id="startTest">Start Load Test</button>
             </div>
         </div>
 
@@ -42,5 +45,6 @@
         <script src="serialPort.js"></script>
         <script src="loadTester.js"></script>
         <script src="loadTesting.js"></script>
+        <script src="script.js"></script>
     </body>
 </html>

@@ -16,7 +16,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         },
         constantModeValues : {
             CC : {
-                HIGH : getConfig("constantModeValues.CC.HIGH") ?? "+60.0",
+                HIGH : getConfig("constantModeValues.CC.HIGH") ?? "+8.0",
                 LOW : getConfig("constantModeValues.CC.LOW") ?? "0.0"
             },
             CV : {

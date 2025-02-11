@@ -10,59 +10,68 @@ async function initializeSerial() {
         console.error("Could not find serial device");
 
     await connectSerial();
+
+    document.querySelector("#testerName").innerText = await requestSerialMessage("name");
+
+    listen();
+
+    startReading();
 }
 
 async function connectSerial() {
     await serialPort.open(getLoadTestingConfig("portOptions"));
 }
 
-async function sendSerialMessage(message) {
-    if(serialPort.writable.locked) {
-        console.log("Serial Port Writable Locked");
-        return false;
-    }
+const queue = [];
 
+async function listen() {
     const writer = serialPort.writable.getWriter();
-
-    await writer.write(encoder.encode(message));
-
-    writer.close();
-    return true;
-}
-
-async function requestSerialMessage(message) {
-    if(serialPort.readable.locked) {
-        console.log("Serial Port Readable Locked");
-        return null;
-    }
-
     const reader = serialPort.readable.getReader();
 
-    if(!sendSerialMessage(message))
-        return null;
-
-    let returnedMessage = "";
-
-    let lastChar = "\n";
     while(true) {
-        const {value, done} = await reader.read();
+        let request;
 
-        if(done)
-            return null;
+        do {
+            request = queue.unshift()
+        } while(!request);
 
-        lastChar = decoder.decode(value);
+        await writer.write(encoder.encode(request.message + "\n"));
 
-        if(lastChar == "\n") {
-            if(returnedMessage == "error")
-                console.error("Load Tester Error");
-            
-            return returnedMessage;
+        if(request.message.endsWith("?")) {
+            let returnedMessage = "";
+
+            while(true) {
+                const { value, done } = await reader.read();
+
+                const char = decoder.decode(value);
+
+                if(done || char == "\n")
+                    break;
+                
+                returnedMessage += char;
+            }
+
+            if(returnedMessage == "Error")
+                alert("Load Tester Error");
+
+            request.response(returnedMessage);
+        } else {
+            request.response();
         }
-
-        returnedMessage += lastChar;
     }
 }
 
-document.querySelector("#sendCommand").addEventListener("click", () => {
-    sendSerialMessage(document.querySelector("#commandPrompt").value);
+function sendSerialMessage(message) {
+    return new Promise(response => queue.push({
+        message,
+        response
+    }));
+}
+
+function requestSerialMessage(message) {
+    return sendSerialMessage(message + "?");
+}
+
+document.querySelector("#sendCommand").addEventListener("click", async () => {
+    alert(await sendSerialMessage(document.querySelector("#commandPrompt").value));
 });
