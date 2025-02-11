@@ -4,7 +4,9 @@ const BATTERY_DATA_ITEM = "batteryData";
     let batteryData;
 
     try {
-        const data = localStorage.getItem(BATTERY_DATA_ITEM);
+        // apparently a JSON parse returns null if it is fed null, so I'm making it undefined to make it throw an error.
+        const data = localStorage.getItem(BATTERY_DATA_ITEM) ?? undefined;
+
         batteryData = JSON.parse(data);
     } catch(e) {
         console.error(e);
@@ -22,10 +24,10 @@ const BATTERY_DATA_ITEM = "batteryData";
             return batteryData[name] = {
                 name,
                 lastCapacity : 0,
-                lastAmpMax : 0,
-                lastAmpMin : 0,
-                lastVoltMax : 0,
-                lastVoltMin : 0,
+                lastCurrentMax : 0,
+                lastCurrentMin : 0,
+                lastVoltageMax : 0,
+                lastVoltageMin : 0,
                 tests : []
             };
         return null;
@@ -33,5 +35,14 @@ const BATTERY_DATA_ITEM = "batteryData";
 
     function lookupBattery(name) {
         return batteryData[name];
+    }
+
+    const batteryList = document.querySelector('#batteryNames');
+
+    for(const batteryName of Object.keys(batteryData)) {
+        const element = document.createElement("option");
+        element.value = batteryName;
+
+        batteryList.appendChild(element);
     }
 }

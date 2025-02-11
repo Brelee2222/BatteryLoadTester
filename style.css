@@ -1,0 +1,13 @@
+.display {
+    display: flex;
+    flex-direction: row;
+    flex: content;
+}
+
+.section {
+    width: 50%;
+}
+
+button:active {
+    color: red;
+}

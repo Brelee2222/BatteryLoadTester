@@ -1,5 +1,46 @@
-<body>
-    <script src="loadTesterConfigs.js"></script>
-    <script src="serialPort.js"></script>
-    <button onclick="setupSerial();">test</button>
-</body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </head>
+    <body>
+        <div class="display">
+            <div class="section">
+                <h1>Load Tester</h1>
+                <button onclick="initializeSerial();">Connect Tester</button>
+                <div>
+                    <h2>Readings</h2>
+                    <ul><b>Current: </b><span id="currentReading"></span> A</ul>
+                    <ul><b>Voltage: </b><span id="voltageReading"></span> V</ul>
+                    <ul><b>Resistance: </b><span id="resistanceReading"></span> Ω</ul>
+                    <ul><b>Power: </b><span id="powerReading"></span> W</ul>
+                </div>
+                <div style="display:none;">
+                    <label>Command</label>
+                    <input type="text" id="commandPrompt"/>
+                    <button id="sendCommand">Send</button>
+                </div>
+            </div>
+            <div class="section">
+                <h1>Battery</h1>
+                <input list="batteryNames" name="batteryName" id="batteryName">
+                <datalist id="batteryNames"></datalist>
+
+                <button id="loadBattery">Load Battery</button>
+
+                <p><b>Name: </b><span id="currentBatteryName"></span></p>
+                <p><b>Last Capacity: </b><span id="batteryLastCapacity"></span> wH</p>
+                <p><b>Last Voltage Max: </b><span id="batteryLastVoltageMax"></span> V</p>
+                <p><b>Last Voltage Min: </b><span id="batteryLastVoltageMin"></span> V</p>
+                <p><b>Last Current Max: </b><span id="batteryLastCurrentMax"></span> A</p>
+                <p><b>Last Current Min: </b><span id="batteryLastCurrentMin"></span> A</p>
+            </div>
+        </div>
+
+        <script src="loadTesterConfigs.js"></script>
+        <script src="batteryData.js"></script>
+        <script src="serialPort.js"></script>
+        <script src="loadTester.js"></script>
+        <script src="loadTesting.js"></script>
+    </body>
+</html>

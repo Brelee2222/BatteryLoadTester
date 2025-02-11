@@ -8,6 +8,8 @@ async function initializeSerial() {
 
     if(serialPort == undefined)
         console.error("Could not find serial device");
+
+    await connectSerial();
 }
 
 async function connectSerial() {
@@ -60,3 +62,7 @@ async function requestSerialMessage(message) {
         returnedMessage += lastChar;
     }
 }
+
+document.querySelector("#sendCommand").addEventListener("click", () => {
+    sendSerialMessage(document.querySelector("#commandPrompt").value);
+});
