@@ -16,7 +16,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         },
         constantModeValues : {
             CC : {
-                HIGH : getConfig("constantModeValues.CC.HIGH") ?? "+8.0",
+                HIGH : getConfig("constantModeValues.CC.HIGH") ?? "+40.0",
                 LOW : getConfig("constantModeValues.CC.LOW") ?? "0.0"
             },
             CV : {
@@ -34,6 +34,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         },
         loadTestingSettings : {
             onVoltage : getConfig("loadTestingSettings.onVoltage") ?? "+12.0",
+            stayOffVoltage : getConfig("loadTestingSettings.stayOffVoltage") ?? "+13.0",
             offVoltage : getConfig("loadTestingSettings.offVoltage") ?? "+10.0"
         }
     };

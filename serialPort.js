@@ -11,9 +11,9 @@ async function initializeSerial() {
 
     await connectSerial();
 
-    document.querySelector("#testerName").innerText = await requestSerialMessage("name");
-
     listen();
+
+    document.querySelector("#testerName").innerText = await requestSerialMessage("name");
 
     startReading();
 }
@@ -23,6 +23,7 @@ async function connectSerial() {
 }
 
 const queue = [];
+const TIMEOUT_DELAY = 10;
 
 async function listen() {
     const writer = serialPort.writable.getWriter();
@@ -30,18 +31,31 @@ async function listen() {
 
     while(true) {
         let request;
-
+    
         do {
-            request = queue.unshift()
+           request = queue.shift();
+
+           await new Promise(res => setTimeout(res, TIMEOUT_DELAY));
         } while(!request);
 
-        await writer.write(encoder.encode(request.message + "\n"));
+        if(!request) {
+            setTimeout(tick, TIMEOUT_DELAY);
+            return;
+        }
+
+
+
+        writer.write(encoder.encode(request.message + "\n"));
 
         if(request.message.endsWith("?")) {
             let returnedMessage = "";
 
             while(true) {
+                const timeout = setTimeout(() => alert("Load tester took too long to respond."), 10000);
+
                 const { value, done } = await reader.read();
+
+                clearTimeout(timeout);
 
                 const char = decoder.decode(value);
 
