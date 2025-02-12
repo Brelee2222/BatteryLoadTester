@@ -9,6 +9,8 @@ async function initializeSerial() {
 
         if(serialPort == undefined)
             console.error("Could not find serial device");
+    } else {
+        serialPort.close();
     }
 
     await connectSerial();

@@ -29,6 +29,7 @@ const BATTERY_DATA_ITEM = "batteryData";
                 lastCurrentMin : 0,
                 lastVoltageMax : 0,
                 lastVoltageMin : 0,
+                lastDrainDurationInSeconds : 0,
                 tests : []
             };
         return null;

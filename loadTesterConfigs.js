@@ -13,7 +13,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         high : getConfig("high") ?? true,
         portOptions : {
             baudRate : getConfig("portOptions.baudRate") ?? 9600,
-            flowControl : "hardware"
+            bufferSize : 510
         },
         constantModeValues : {
             CC : {
@@ -36,7 +36,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         loadTestingSettings : {
             onVoltage : getConfig("loadTestingSettings.onVoltage") ?? "+12.0",
             stayOffVoltage : getConfig("loadTestingSettings.stayOffVoltage") ?? "+13.0",
-            offVoltage : getConfig("loadTestingSettings.offVoltage") ?? "+10.0"
+            offVoltage : getConfig("loadTestingSettings.offVoltage") ?? "+10.5"
         }
     };
 

@@ -60,10 +60,12 @@ const READING_INTERVAL_MILLIS = 5000;
         test = {
             startTime : Date.now(),
             idleVoltage : getLoadTesterReading().voltage,
+            drainDuration : 0,
             timestamps: []
         };
 
-        loopBatteryTest();
+        // delay to get a reading before starting the test
+        setInterval(loopBatteryTest, 3000);
     }
 
     const loopBatteryTest = async function() {
@@ -88,9 +90,9 @@ const READING_INTERVAL_MILLIS = 5000;
     }
 
     const finishBatteryTesting = function(test) {
-        battery.tests.push(test);
-
         sendSerialMessage(`LOAD OFF`);
+
+        battery.tests.push(test);
 
         processTest();
 
@@ -118,6 +120,8 @@ const READING_INTERVAL_MILLIS = 5000;
 
             lastTime = timestamp.time;
         }
+
+        battery.lastDrainDurationInSeconds = test.drainDuration = (lastTime - test.startTime) / 1000;
 
         battery.lastCapacity = wattMillis / 60 / 60 / 1000;
         battery.lastCurrentMax = currentMax;
@@ -159,6 +163,7 @@ const READING_INTERVAL_MILLIS = 5000;
         document.querySelector("#batteryLastIdleVoltage").innerText = battery.lastIdleVoltage;
         document.querySelector("#batteryLastCurrentMax").innerText = battery.lastCurrentMax;
         document.querySelector("#batteryLastCurrentMin").innerText = battery.lastCurrentMin;
+        document.querySelector("#batteryLastDrainDuration").innerText = battery.lastDrainDurationInSeconds;
     }
 
     document.querySelector("#loadBattery").addEventListener("click", loadBattery);
