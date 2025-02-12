@@ -12,7 +12,8 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
         static : getConfig("static") ?? true,
         high : getConfig("high") ?? true,
         portOptions : {
-            baudRate : getConfig("portOptions.baudRate") ?? 9600
+            baudRate : getConfig("portOptions.baudRate") ?? 9600,
+            flowControl : "hardware"
         },
         constantModeValues : {
             CC : {
