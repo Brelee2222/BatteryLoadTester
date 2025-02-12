@@ -4,10 +4,12 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8");
 
 async function initializeSerial() {
-    serialPort = await navigator.serial.requestPort();
+    if(serialPort == undefined) {
+        serialPort = await navigator.serial.requestPort();
 
-    if(serialPort == undefined)
-        console.error("Could not find serial device");
+        if(serialPort == undefined)
+            console.error("Could not find serial device");
+    }
 
     await connectSerial();
 
@@ -23,7 +25,7 @@ async function connectSerial() {
 }
 
 const queue = [];
-const TIMEOUT_DELAY = 10;
+const TIMEOUT_DELAY = 25;
 
 async function listen() {
     const writer = serialPort.writable.getWriter();
@@ -33,9 +35,8 @@ async function listen() {
         let request;
     
         do {
-           request = queue.shift();
-
            await new Promise(res => setTimeout(res, TIMEOUT_DELAY));
+           request = queue.shift();
         } while(!request);
 
         if(!request) {

@@ -24,7 +24,7 @@ const BATTERY_DATA_ITEM = "batteryData";
             return batteryData[name] = {
                 name,
                 lastCapacity : 0,
-                
+                lastIdleVoltage : 0,
                 lastCurrentMax : 0,
                 lastCurrentMin : 0,
                 lastVoltageMax : 0,

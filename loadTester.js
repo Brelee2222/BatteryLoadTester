@@ -1,5 +1,3 @@
-const READING_INTERVAL_MILLIS = 5000;
-
 {
     let current = 0;
     let voltage = 0;

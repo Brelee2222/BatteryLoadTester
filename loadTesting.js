@@ -1,3 +1,5 @@
+const READING_INTERVAL_MILLIS = 5000;
+
 {
     let battery;
 
@@ -61,30 +63,31 @@
             timestamps: []
         };
 
-        testInterval = setInterval(testBatteryTick, READING_INTERVAL_MILLIS);
+        loopBatteryTest();
     }
 
-    const testBatteryTick = async function() {
-        const readings = getLoadTesterReading();
+    const loopBatteryTest = async function() {
+        while(true) {
+            await new Promise(res => setTimeout(res, READING_INTERVAL_MILLIS));
 
-        if(!serialPort.connected) {
-            alert("Load Tester Disconnected");
-            finishBatteryTesting();
-            return;
+            const readings = getLoadTesterReading();
+
+            if(!serialPort.connected) {
+                alert("Load Tester Disconnected");
+                finishBatteryTesting();
+                return;
+            }
+
+            if(readings.current <= 0) {
+                finishBatteryTesting();
+                return;
+            }
+
+            test.timestamps.push(readings);
         }
-
-        if(readings.current <= 0) {
-            finishBatteryTesting();
-            return;
-        }
-
-        test.timestamps.push(readings);
     }
 
-    const finishBatteryTesting = function() {
-        clearInterval(testInterval);
-        testInterval = undefined;
-
+    const finishBatteryTesting = function(test) {
         battery.tests.push(test);
 
         sendSerialMessage(`LOAD OFF`);
@@ -121,7 +124,7 @@
         battery.lastCurrentMin = currentMin;
         battery.lastVoltageMax = voltageMax;
         battery.lastVoltageMin = voltageMin;
-        battery.lastIdleVoltage = test.idleVoltage
+        battery.lastIdleVoltage = test.idleVoltage;
     }
 
     // Load information about a battery
@@ -131,6 +134,7 @@
         if(name == "")
             return;
 
+        // Secret command prompt
         if(name == "LoadTest") {
             document.querySelector("#batteryName").value = "";
             document.querySelector("#command").style.display = "block";
@@ -152,7 +156,7 @@
         document.querySelector("#batteryLastCapacity").innerText = battery.lastCapacity;
         document.querySelector("#batteryLastVoltageMax").innerText = battery.lastVoltageMax;
         document.querySelector("#batteryLastVoltageMin").innerText = battery.lastVoltageMin;
-        document.querySelector("#batteryLastIdleVoltage").innerText = battery.idleVoltage;
+        document.querySelector("#batteryLastIdleVoltage").innerText = battery.lastIdleVoltage;
         document.querySelector("#batteryLastCurrentMax").innerText = battery.lastCurrentMax;
         document.querySelector("#batteryLastCurrentMin").innerText = battery.lastCurrentMin;
     }
