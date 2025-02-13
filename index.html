@@ -8,7 +8,11 @@
         <div class="display">
             <div class="section">
                 <h1>Load Tester</h1>
-                <button onclick="initializeSerial();">Connect Tester</button>
+                <div>
+                    <button id="selectLoad">Select Load Tester</button>
+                    <span id="portCheck"></span>
+                </div>
+                <button id="connect">Connect</button>
                 <h2 id="testerName">Not Connected</h2>
                 <div>
                     <h2>Readings</h2>
@@ -42,11 +46,11 @@
             </div>
         </div>
 
-        <script src="loadTesterConfigs.js"></script>
-        <script src="batteryData.js"></script>
-        <script src="serialPort.js"></script>
-        <script src="loadTester.js"></script>
-        <script src="loadTesting.js"></script>
         <script src="script.js"></script>
+        <script src="loadTester/configs.js"></script>
+        <script src="loadTester/serialPort.js"></script>
+        <script src="loadTester/reading.js"></script>
+        <script src="battery/batteryData.js"></script>
+        <script src="battery/loadTesting.js"></script>
     </body>
 </html>

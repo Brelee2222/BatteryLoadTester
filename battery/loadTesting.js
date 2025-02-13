@@ -1,14 +1,7 @@
-const READING_INTERVAL_MILLIS = 5000;
-
 {
     let battery;
 
     let test;
-    let testInterval;
-
-    function isTesting() {
-        return testInterval != undefined;
-    }
 
     // Set the configurations to the load tester
     const setupConfigs = async function() {
@@ -35,11 +28,9 @@ const READING_INTERVAL_MILLIS = 5000;
         await ldOnPromise;
         await ldOffPromise;
         await onPromise;
-
-        setTimeout(() => sendSerialMessage(`ldonv ${getLoadTestingConfig("loadTestingSettings.stayOnVoltage")}`), 2000);
     }
 
-    const testBattery = function() {
+    async function testBattery() {
         if(!battery) {
             alert("Please load a battery.");
             return;
@@ -52,54 +43,40 @@ const READING_INTERVAL_MILLIS = 5000;
 
         document.querySelector("#startTest").disabled = true;
 
-        loadOnVoltage = getLoadTestingConfig("loadTestingSettings.onVoltage");
-        loadOffVoltage = getLoadTestingConfig("loadTestingSettings.offVoltage");
-
         setupConfigs();
 
         test = {
+            name : new Date().toISOString(),
             startTime : Date.now(),
-            idleVoltage : getLoadTesterReading().voltage,
-            drainDuration : 0,
+            idleVoltage : (await getNextReading()).voltage,
+            drainDuration : undefined,
+            testingSuccessful : false,
             timestamps: []
         };
 
         // delay to get a reading before starting the test
-        setInterval(loopBatteryTest, 3000);
+        setTimeout(loopBatteryTest, 3000);
     }
 
     const loopBatteryTest = async function() {
         while(true) {
             await new Promise(res => setTimeout(res, READING_INTERVAL_MILLIS));
 
-            const readings = getLoadTesterReading();
+            const readings = await getNextReading();
 
             if(!serialPort.connected) {
                 alert("Load Tester Disconnected");
-                finishBatteryTesting();
+                finishBatteryTesting(false);
                 return;
             }
 
-            if(readings.current <= 0) {
-                finishBatteryTesting();
+            if(readings.current <= 0.1) {
+                finishBatteryTesting(true);
                 return;
             }
 
             test.timestamps.push(readings);
         }
-    }
-
-    const finishBatteryTesting = function(test) {
-        sendSerialMessage(`LOAD OFF`);
-
-        battery.tests.push(test);
-
-        processTest();
-
-        saveBatteryData();
-
-        displayInformation();
-        document.querySelector("#startTest").disabled = false;
     }
 
     const processTest = function() {
@@ -111,7 +88,7 @@ const READING_INTERVAL_MILLIS = 5000;
 
         let lastTime = test.startTime;
         for(const timestamp of test.timestamps) {
-            wattMillis += timestamp.power * (timestamp.time - lastTime);
+            wattMillis += timestamp.current * timestamp.voltage * (timestamp.time - lastTime);
 
             currentMax = Math.max(currentMax, timestamp.current);
             currentMin = Math.min(currentMin, timestamp.current);
@@ -131,8 +108,24 @@ const READING_INTERVAL_MILLIS = 5000;
         battery.lastIdleVoltage = test.idleVoltage;
     }
 
+    const finishBatteryTesting = function(successful) {
+        sendSerialMessage(`LOAD OFF`);
+
+        test.testingSuccessful = successful;
+
+        battery.tests.push(test);
+
+        processTest();
+
+        displayBattery(battery);
+
+        saveBatteryData();
+
+        document.querySelector("#startTest").disabled = false;
+    }
+
     // Load information about a battery
-    const loadBattery = function() {
+    function loadBattery() {
         const name = document.querySelector("#batteryName").value;
 
         if(name == "")
@@ -140,8 +133,7 @@ const READING_INTERVAL_MILLIS = 5000;
 
         // Secret command prompt
         if(name == "LoadTest") {
-            document.querySelector("#batteryName").value = "";
-            document.querySelector("#command").style.display = "block";
+            showCommandPrompt();
             return;
         }
 
@@ -150,20 +142,9 @@ const READING_INTERVAL_MILLIS = 5000;
         if(!battery)
             battery = createBattery(name);
 
-        displayInformation();
+        displayBattery(battery);
 
         saveBatteryData();
-    }
-
-    const displayInformation = function() {
-        document.querySelector("#currentBatteryName").innerText = battery.name;
-        document.querySelector("#batteryLastCapacity").innerText = battery.lastCapacity;
-        document.querySelector("#batteryLastVoltageMax").innerText = battery.lastVoltageMax;
-        document.querySelector("#batteryLastVoltageMin").innerText = battery.lastVoltageMin;
-        document.querySelector("#batteryLastIdleVoltage").innerText = battery.lastIdleVoltage;
-        document.querySelector("#batteryLastCurrentMax").innerText = battery.lastCurrentMax;
-        document.querySelector("#batteryLastCurrentMin").innerText = battery.lastCurrentMin;
-        document.querySelector("#batteryLastDrainDuration").innerText = battery.lastDrainDurationInSeconds;
     }
 
     document.querySelector("#loadBattery").addEventListener("click", loadBattery);

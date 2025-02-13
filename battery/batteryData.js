@@ -20,7 +20,9 @@ const BATTERY_DATA_ITEM = "batteryData";
     }
 
     function createBattery(name) {
-        if(!batteryData[name])
+        if(!batteryData[name]) {
+            createBatteryOption(name);
+            
             return batteryData[name] = {
                 name,
                 lastCapacity : 0,
@@ -32,6 +34,7 @@ const BATTERY_DATA_ITEM = "batteryData";
                 lastDrainDurationInSeconds : 0,
                 tests : []
             };
+        }
         return null;
     }
 
@@ -39,12 +42,6 @@ const BATTERY_DATA_ITEM = "batteryData";
         return batteryData[name];
     }
 
-    const batteryList = document.querySelector('#batteryNames');
-
-    for(const batteryName of Object.keys(batteryData)) {
-        const element = document.createElement("option");
-        element.value = batteryName;
-
-        batteryList.appendChild(element);
-    }
+    for(const batteryName of Object.keys(batteryData))
+        createBatteryOption(batteryName);
 }
