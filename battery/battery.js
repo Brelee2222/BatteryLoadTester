@@ -12,6 +12,9 @@
             element.innerText = testName;
             return element;
         }).forEach(testSelect.appendChild, testSelect);
+
+        document.querySelector("#testSelect").value = batteryTestNames[batteryTestNames.length-1];
+        displayTestInformation(batteryTestNames[batteryTestNames.length-1]);
     }
 
     function loadBattery(battery) {
@@ -20,9 +23,6 @@
         document.querySelector("#batteryName").innerText = battery.name;
 
         listTests();
-
-        document.querySelector("#testSelect").value = batteryTestNames[batteryTestNames.length-1];
-        displayTestInformation(batteryTestNames[batteryTestNames.length-1]);
     }
 
     function recordTest(test) {
