@@ -21,9 +21,7 @@ const BATTERY_DATA_ITEM = "batteryData";
     }
 
     // Create a battery log
-    const createBattery = function(name) {
-        createBatteryOption(name);
-            
+    const createBattery = function(name) {            
         return batteryData[name] = {
             name,
             tests : {}
