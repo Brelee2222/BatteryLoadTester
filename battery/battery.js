@@ -1,11 +1,7 @@
 {
     let currentBattery;
 
-    function loadBattery(battery) {
-        currentBattery = battery;
-
-        document.querySelector("#batteryName").innerText = battery.name;
-
+    function listTests() {
         const testSelect = document.querySelector("#testSelect");
         for(const child of testSelect.children)
             child.remove();
@@ -16,6 +12,14 @@
             element.innerText = testName;
             return element;
         }).forEach(testSelect.appendChild, testSelect);
+    }
+
+    function loadBattery(battery) {
+        currentBattery = battery;
+
+        document.querySelector("#batteryName").innerText = battery.name;
+
+        listTests();
 
         document.querySelector("#testSelect").value = batteryTestNames[batteryTestNames.length-1];
         displayTestInformation(batteryTestNames[batteryTestNames.length-1]);
@@ -29,6 +33,8 @@
 
         saveBatteryData();
 
+        listTests();
+        
         displayTestInformation(test.name);
     }
 
