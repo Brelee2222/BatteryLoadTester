@@ -33,7 +33,7 @@ const BATTERY_DATA_ITEM = "batteryData";
         const name = document.querySelector("#batteryNameSelect").value;
 
         if(name == "LoadTestCommand") {
-            document.querySelector("#portCheck").innerText = "Tester Selected";
+            document.querySelector("#command").style.display = "";
             return;
         }
 

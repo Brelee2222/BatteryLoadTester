@@ -36,7 +36,7 @@ const CODE_VERSION = "1.0";
         document.querySelector("#startTest").disabled = true;
 
         test = {
-            name : new Date().toISOString(),
+            name : new Date().toUTCString(),
             // How data is collected matters to what capacity we get. We should store the code version to know how the data was collected. 
             codeVersion: CODE_VERSION,
             startTime : Date.now(),
