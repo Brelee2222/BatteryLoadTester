@@ -50,7 +50,7 @@
     function downloadTest() {
         const test = currentBattery.tests[document.querySelector("#testSelect").value];
         console.log(test);
-        const timestamps = test.timestamps.map(timestamp => `${timestamp.time},${timestamp.voltage},${timestamp.current}\n`);
+        const timestamps = test.timestamps.map(timestamp => `${timestamp.time - test.startTime},${timestamp.voltage},${timestamp.current}\n`);
         const a = document.createElement("a");
         const blob = new Blob([`Battery Name,,${currentBattery.name}\n`, `Test Name,,${test.name}\n`, `Test Duration (s),,${test.drainDuration}\n`, `Capacity (wH),,${test.capacity}\n`,`Idle Voltage (V),,${test.idleVoltage}\n`,`Voltage Max (V),,${test.voltageMax}\n`, `Voltage Min (V),,${test.voltageMin}\n`, `Current Max (A),,${test.currentMax}\n`, `Current Min (A),,${test.currentMin}\n`, "\nTimestamps\n", "Time,Voltage,Current\n", ...timestamps], {type: "text/plain"});
 

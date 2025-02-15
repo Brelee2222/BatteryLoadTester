@@ -32,15 +32,6 @@ const CODE_VERSION = "1.0";
     }
 
     async function testBattery() {
-        if(!battery) {
-            alert("Please load a battery.");
-            return;
-        }
-
-        if(!serialPort || !serialPort.connected) {
-            alert("Load tester must be connected.");
-            return;
-        }
 
         document.querySelector("#startTest").disabled = true;
 
@@ -70,12 +61,6 @@ const CODE_VERSION = "1.0";
             await new Promise(res => setTimeout(res, READING_INTERVAL_MILLIS));
 
             const readings = await getNextReading();
-
-            if(!serialPort.connected) {
-                alert("Load Tester Disconnected");
-                finishBatteryTesting(false);
-                return;
-            }
 
             if(readings.current <= 0.1) {
                 finishBatteryTesting(true);

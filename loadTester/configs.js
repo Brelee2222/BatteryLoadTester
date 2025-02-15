@@ -34,7 +34,7 @@ const LOAD_TESTING_CONFIG_ITEM = "loadTestingConfig"
             }
         },
         loadTestingSettings : {
-            onVoltage : getConfig("loadTestingSettings.onVoltage") ?? "+13.0",
+            onVoltage : getConfig("loadTestingSettings.onVoltage") ?? "+12.7",
             offVoltage : getConfig("loadTestingSettings.offVoltage") ?? "+10.5"
         }
     };

@@ -58,7 +58,10 @@
 
                     // To detect when the load tester does not respond.
                     const timeout = setTimeout(() => {
-                        alert("Load tester took too long to respond.")
+                        console.error("Load tester took too long to respond.");
+                        queue.unshift(request);
+                        writer.releaseLock();
+                        reader.releaseLock();
                         listen();
                     }, 10000);
 
@@ -66,7 +69,6 @@
 
                     // if a new listener was started, pass the request back into the queue, and stop
                     if(listenerID != id) {
-                        queue.unshift(request);
                         return;
                     }
 
