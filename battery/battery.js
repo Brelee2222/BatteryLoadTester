@@ -34,8 +34,6 @@
         saveBatteryData();
 
         listTests();
-
-        displayTestInformation(test.name);
     }
 
     const displayTestInformation = function(name) {

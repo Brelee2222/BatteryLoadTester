@@ -20,6 +20,18 @@
                     <ul><b>Voltage: </b><span id="voltageReading"></span> V</ul>
                     <ul><b>Power: </b><span id="powerReading"></span> W</ul>
                 </div>
+                <div id="configSetting">
+                    <div>
+                        <label for="configPathInput">Config Path: </label>
+                        <input type="text" id="configPathInput">
+                        <button id="getConfig">Get Value</button>
+                    </div>
+                    <div>
+                        <label for="configSet">Set Config Value: </label>
+                        <input type="text" id="setConfig">
+                        <button id="setConfigValue">Set Value</button>
+                    </div>
+                </div>
                 <div id="command" style="display: none;">
                     <label>Command (Please use with caution)</label>
                     <input type="text" id="commandPrompt"/>
@@ -54,6 +66,7 @@
         </div>
 
         <script src="loadTester/configs.js"></script>
+        <script src="loadTester/configEdit.js"></script>
         <script src="loadTester/serialPort.js"></script>
         <script src="loadTester/reading.js"></script>
         <script src="battery/battery.js"></script>
