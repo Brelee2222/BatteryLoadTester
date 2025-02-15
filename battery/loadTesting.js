@@ -1,6 +1,7 @@
-{
-    let battery;
+const CODE_VERSION = "1.0";
 
+{
+    // The current test being done
     let test;
 
     // Set the configurations to the load tester
@@ -43,19 +44,25 @@
 
         document.querySelector("#startTest").disabled = true;
 
-        setupConfigs();
-
         test = {
             name : new Date().toISOString(),
+            // How data is collected matters to what capacity we get. We should store the code version to know how the data was collected. 
+            codeVersion: CODE_VERSION,
             startTime : Date.now(),
             idleVoltage : (await getNextReading()).voltage,
-            drainDuration : undefined,
+            drainDuration : null,
+            capacity : null,
+            voltageMax : null,
+            voltageMin : null,
+            currentMax : null,
+            currentMin : null,
             testingSuccessful : false,
             timestamps: []
         };
 
-        // delay to get a reading before starting the test
-        setTimeout(loopBatteryTest, 3000);
+        setupConfigs();
+
+        loopBatteryTest();
     }
 
     const loopBatteryTest = async function() {
@@ -98,14 +105,13 @@
             lastTime = timestamp.time;
         }
 
-        battery.lastDrainDurationInSeconds = test.drainDuration = (lastTime - test.startTime) / 1000;
+        test.drainDuration = (lastTime - test.startTime) / 1000;
 
-        battery.lastCapacity = wattMillis / 60 / 60 / 1000;
-        battery.lastCurrentMax = currentMax;
-        battery.lastCurrentMin = currentMin;
-        battery.lastVoltageMax = voltageMax;
-        battery.lastVoltageMin = voltageMin;
-        battery.lastIdleVoltage = test.idleVoltage;
+        test.capacity = wattMillis / 60 / 60 / 1000;
+        test.currentMax = currentMax;
+        test.currentMin = currentMin;
+        test.voltageMax = voltageMax;
+        test.voltageMin = voltageMin;
     }
 
     const finishBatteryTesting = function(successful) {
@@ -113,41 +119,12 @@
 
         test.testingSuccessful = successful;
 
-        battery.tests.push(test);
-
         processTest();
 
-        displayBattery(battery);
-
-        saveBatteryData();
-
+        recordTest(test);
+    
         document.querySelector("#startTest").disabled = false;
     }
-
-    // Load information about a battery
-    function loadBattery() {
-        const name = document.querySelector("#batteryName").value;
-
-        if(name == "")
-            return;
-
-        // Secret command prompt
-        if(name == "LoadTest") {
-            showCommandPrompt();
-            return;
-        }
-
-        battery = lookupBattery(name);
-
-        if(!battery)
-            battery = createBattery(name);
-
-        displayBattery(battery);
-
-        saveBatteryData();
-    }
-
-    document.querySelector("#loadBattery").addEventListener("click", loadBattery);
-
+    
     document.querySelector("#startTest").addEventListener("click", testBattery);
 }

@@ -13,12 +13,18 @@ const READING_INTERVAL_MILLIS = 10;
     }
 
     async function tickLoop() {
+        const currentReading = document.querySelector("#currentReading");
+        const voltageReading = document.querySelector("#voltageReading");
+        const powerReading = document.querySelector("#powerReading");
+
         while(true) {
             await new Promise(res => setTimeout(res, READING_INTERVAL_MILLIS));
 
-            nextReading = readLatest();
+            const readings = await (nextReading = readLatest());
 
-            await nextReading;
+            currentReading.innerText = readings.current;
+            voltageReading.innerText = readings.voltage;
+            powerReading.innerText = readings.current * readings.voltage;
         }
     }
 
@@ -35,8 +41,6 @@ const READING_INTERVAL_MILLIS = 10;
             voltage,
             time
         };
-
-        displayReadings(readings);
 
         return readings;
     }

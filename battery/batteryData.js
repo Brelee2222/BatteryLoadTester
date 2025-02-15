@@ -1,6 +1,7 @@
 const BATTERY_DATA_ITEM = "batteryData";
 
 {
+    // Battery data
     let batteryData;
 
     try {
@@ -11,37 +12,46 @@ const BATTERY_DATA_ITEM = "batteryData";
     } catch(e) {
         console.error(e);
 
-        localStorage.setItem(BATTERY_DATA_ITEM, "{}");
         batteryData = {};
     }
 
+    // Write the current battery data to local storage
     function saveBatteryData() {
         localStorage.setItem(BATTERY_DATA_ITEM, JSON.stringify(batteryData));
     }
 
-    function createBattery(name) {
-        if(!batteryData[name]) {
-            createBatteryOption(name);
+    // Create a battery log
+    const createBattery = function(name) {
+        createBatteryOption(name);
             
-            return batteryData[name] = {
-                name,
-                lastCapacity : 0,
-                lastIdleVoltage : 0,
-                lastCurrentMax : 0,
-                lastCurrentMin : 0,
-                lastVoltageMax : 0,
-                lastVoltageMin : 0,
-                lastDrainDurationInSeconds : 0,
-                tests : []
-            };
+        return batteryData[name] = {
+            name,
+            tests : {}
+        };
+    }
+
+    // Returns a battery of the given name
+    const selectBattery = function() {
+        const name = document.querySelector("#batteryNameSelect").value;
+
+        if(name == "LoadTestCommand") {
+            document.querySelector("#portCheck").innerText = "Tester Selected";
+            return;
         }
-        return null;
+
+        let battery = batteryData[name];
+        if(!battery)
+            battery = createBattery(name);
+
+        loadBattery(battery);
     }
 
-    function lookupBattery(name) {
-        return batteryData[name];
-    }
+    Object.keys(batteryData).map(batteryName =>  {
+        const element = document.createElement("option");
+        element.value = batteryName;
+        return element;
+    }).forEach(document.querySelector("#batteryNames").appendChild, document.querySelector("#batteryNames"));
 
-    for(const batteryName of Object.keys(batteryData))
-        createBatteryOption(batteryName);
+    
+    document.querySelector("#selectBattery").addEventListener("click", selectBattery);
 }
