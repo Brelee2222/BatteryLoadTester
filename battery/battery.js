@@ -6,7 +6,7 @@
         for(const child of testSelect.children)
             child.remove();
 
-        const batteryTestNames = Object.keys(battery.tests);
+        const batteryTestNames = Object.keys(currentBattery.tests);
         batteryTestNames.map(testName =>  {
             const element = document.createElement("option");
             element.innerText = testName;
@@ -34,7 +34,7 @@
         saveBatteryData();
 
         listTests();
-        
+
         displayTestInformation(test.name);
     }
 
