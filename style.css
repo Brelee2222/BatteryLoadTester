@@ -1,4 +1,30 @@
-.display {
+body {
+    font-family: "Roboto";
+}
+
+section {
+    border: 2px black solid;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 4px;
+    display: table;
+}
+
+h1 {
+    margin-top: 5px;
+}
+
+#rightSection section {
+    width: 100%;
+}
+
+section div {
+    /* display: flex;
+    flex-direction: column; */
+    display: table-row;
+}
+
+.sections {
     display: flex;
     flex-direction: row;
     flex: content;
@@ -12,3 +38,6 @@ button:active {
     color: red;
 }
 
+#testSelect {
+    width: 100%;
+}

@@ -2,18 +2,25 @@
 <html>
     <head>
         <title>Load Tester Draft Catlyst</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-        <div class="display">
-            <div class="section">
+        <div class="sections">
+            <section id="batterySection">
                 <h1>Load Tester</h1>
                 <div>
-                    <button id="selectLoad">Select Load Tester</button>
-                    <span id="portCheck"></span>
+                    <div>
+                        <div>
+                            <button id="selectLoad">Select Load Tester</button>
+                            <span id="portCheck"></span>
+                        </div>
+                        <button id="connect">Connect</button>
+                        <p><b id="testerName">Not Connected</b></p>
+                    </div>
                 </div>
-                <button id="connect">Connect</button>
-                <h2 id="testerName">Not Connected</h2>
                 <div>
                     <h2>Readings</h2>
                     <ul><b>Current: </b><span id="currentReading"></span> A</ul>
@@ -37,31 +44,38 @@
                     <input type="text" id="commandPrompt"/>
                     <button id="sendCommand">Send</button>
                 </div>
-            </div>
-            <div class="section">
-                <h1>Battery</h1>
-                <div>
-                    <input list="batteryNames" name="batteryNameSelect" id="batteryNameSelect">
-                    <datalist id="batteryNames"></datalist>
-                    <button id="selectBattery">Select Battery</button>
-                    <p>Battery Name: <span id="batteryName"></span></p>
-                </div>
-                <div>
-                    <div>
-                        <label for="testSelect"><h1>Test:</h1></label>
-                        <select id="testSelect"></select>
+            </section>
+            <div id="rightSection">
+                <section class="batterySection">
+                    <h1>Battery</h1>
+                    <div class="battery">
+                        <input list="batteryNames" name="batteryNameSelect" id="batteryNameSelect">
+                        <datalist id="batteryNames"></datalist>
+                        <button id="selectBattery">Select Battery</button>
+                        <p>Battery Name: <span id="batteryName"></span></p>
                     </div>
-                    <button id="downloadTest">Download Test</button>
-                    <p><b>Drain Duration: </b><span id="drainDuration"></span> s</p>
-                    <p><b>Test Idle Voltage: </b><span id="idleVoltage"></span> V</p>
-                    <p><b>Capacity: </b><span id="capacity"></span> wH</p>
-                    <p><b>Voltage Max: </b><span id="voltageMax"></span> V</p>
-                    <p><b>Voltage Min: </b><span id="voltageMin"></span> V</p>
-                    <p><b>Current Max: </b><span id="currentMax"></span> A</p>
-                    <p><b>Current Min: </b><span id="currentMin"></span> A</p>
-                </div>
+                </section>
+                <section class="testSection">
+                    <div>
+                        <h1>Test</h1>
+                        <div class="test">
+                            <label for="testSelect" style="display: none;">Test Select</label>
+                            <select name="testSelect" id="testSelect"></select>
+                            <button id="testDownload">Download Test</button>
+                        </div>
+                        <div class="testInfo">
+                            <p><b>Drain Duration: </b><span id="drainDuration"></span> s</p>
+                            <p><b>Test Idle Voltage: </b><span id="idleVoltage"></span> V</p>
+                            <p><b>Capacity: </b><span id="capacity"></span> wH</p>
+                            <p><b>Voltage Max: </b><span id="voltageMax"></span> V</p>
+                            <p><b>Voltage Min: </b><span id="voltageMin"></span> V</p>
+                            <p><b>Current Max: </b><span id="currentMax"></span> A</p>
+                            <p><b>Current Min: </b><span id="currentMin"></span> A</p>
+                        </div>
+                    </div>
 
-                <button id="startTest">Start Load Test</button>
+                    <button id="startTest">Start Load Test</button>
+                </section>
             </div>
         </div>
 
