@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Load Tester Draft Catlyst</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8,8 +8,8 @@
         <link rel="stylesheet" type="text/css" href="style.css"/>
     </head>
     <body>
-        <div class="sections">
-            <section id="batterySection">
+        <div class="sections" id="topSection">
+            <section id="batterySection" style="width:45%;">
                 <h1>Load Tester</h1>
                 <div>
                     <div>
@@ -40,12 +40,12 @@
                     </div>
                 </div>
                 <div id="command" style="display: none;">
-                    <label>Command (Please use with caution)</label>
+                    <label>Command: </label>
                     <input type="text" id="commandPrompt"/>
                     <button id="sendCommand">Send</button>
                 </div>
             </section>
-            <div id="rightSection">
+            <div id="rightSection" style="width:45%;">
                 <section class="batterySection">
                     <h1>Battery</h1>
                     <div class="battery">
@@ -79,6 +79,8 @@
             </div>
         </div>
 
+        <canvas id="readingGraph" width="500" height="100" style="width:50%;border:1px solid #000000;"></canvas>
+
         <script src="loadTester/configs.js"></script>
         <script src="loadTester/configEdit.js"></script>
         <script src="loadTester/serialPort.js"></script>
@@ -86,5 +88,6 @@
         <script src="battery/battery.js"></script>
         <script src="battery/batteryData.js"></script>
         <script src="battery/loadTesting.js"></script>
+        <script src="graph/readingGraph.js"></script>
     </body>
 </html>

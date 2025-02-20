@@ -64,6 +64,6 @@
         a.remove();
     }
 
-    document.querySelector("#downloadTest").addEventListener("click", downloadTest);
+    document.querySelector("#testDownload").addEventListener("click", downloadTest);
     document.querySelector("#testSelect").addEventListener("change", () => displayTestInformation(document.querySelector("#testSelect").value));
 }
